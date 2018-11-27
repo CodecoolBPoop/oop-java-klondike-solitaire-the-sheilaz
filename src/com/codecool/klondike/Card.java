@@ -47,7 +47,7 @@ public class Card extends ImageView {
     }
 
     public String getShortName() {
-        return "S " + suit.toString() + "R " + rank.toString();
+        return "S " + suit.toString() + " R " + rank.toString();
     }
 
     public DropShadow getDropShadow() {
@@ -74,7 +74,7 @@ public class Card extends ImageView {
 
     @Override
     public String toString() {
-        return "The " + "Rank" + rank + " of " + "Suit" + suit;
+        return "The Rank " + rank + " of Suit " + suit;
     }
 
     public static boolean isOppositeColor(Card card1, Card card2) {
@@ -104,7 +104,7 @@ public class Card extends ImageView {
 
             for (Rank rank: Rank.values()) {
                 String cardName = suitName + rank.value;
-                String cardId = "S " + suit.toString() + "R " + rank.toString();
+                String cardId = "S " + suit.toString() + " R " + rank.toString();
                 String imageFileName = "card_images/" + cardName + ".png";
                 cardFaceImages.put(cardId, new Image(imageFileName));
             }

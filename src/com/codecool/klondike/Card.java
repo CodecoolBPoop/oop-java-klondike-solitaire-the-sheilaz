@@ -47,7 +47,7 @@ public class Card extends ImageView {
     }
 
     public String getShortName() {
-        return "S" + suit + "R" + rank;
+        return "S " + suit.toString() + "R " + rank.toString();
     }
 
     public DropShadow getDropShadow() {
@@ -104,7 +104,7 @@ public class Card extends ImageView {
 
             for (Rank rank: Rank.values()) {
                 String cardName = suitName + rank.value;
-                String cardId = "S" + suit.value + "R" + rank;
+                String cardId = "S " + suit.toString() + "R " + rank.toString();
                 String imageFileName = "card_images/" + cardName + ".png";
                 cardFaceImages.put(cardId, new Image(imageFileName));
             }
@@ -132,6 +132,11 @@ public class Card extends ImageView {
 
         Rank(int value) {
             this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return name().toLowerCase();
         }
 
     }

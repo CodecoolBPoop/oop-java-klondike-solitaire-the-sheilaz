@@ -123,4 +123,38 @@ public class Card extends ImageView {
         }
     }
 
+    public enum Suit {
+        HEARTS(0), DIAMONDS(1), SPADES(2), CLUBS(3);
+        private int value;
+
+        Suit(int value) {
+            this.value = value;
+        }
+
+        public Suit getName(int searchValue) {
+            for (Suit element: Suit.values()) {
+                if (element.value == searchValue) {
+                    return element;
+                }
+            }
+        }
+    }
+
+    public enum Rank {
+        ACE(0), TWO(1), THREE(2), FOUR(3), FIVE(4), SIX(5), SEVEN(6), EIGHT(7), NINE(8), TEN(9), JACK(10), QUEEN(11), KING(12);
+        private int value;
+
+        private Rank(int value) {
+            this.value = value;
+        }
+
+        public Rank getName(int searchValue) {
+            for (Rank element: Rank.values()) {
+                if (element.value == searchValue) {
+                    return element;
+                }
+            }
+        }
+    }
+
 }

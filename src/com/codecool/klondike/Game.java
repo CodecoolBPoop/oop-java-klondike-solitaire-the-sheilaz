@@ -93,6 +93,9 @@ public class Game extends Pane {
         Pile pile = getValidIntersectingPile(card, pilesToDragTo);
         if (pile != null) {
             handleValidMove(card, pile);
+            if (isGameWon()) {
+                displayAlert();
+            }
         } else {
             draggedCards.forEach(MouseUtil::slideBack);
             draggedCards.clear();
@@ -100,12 +103,16 @@ public class Game extends Pane {
     };
 
     public boolean isGameWon() {
-        if (tableauPiles.isEmpty()) {
-            return (discardPile.isEmpty() && stockPile.isEmpty());
+        int completedPiles = 0;
+        int lastPile = 0;
+        for (Pile pile : foundationPiles) {
+            if (pile.numOfCards() == 13) {
+                completedPiles++;
+            } else if (pile.numOfCards() == 12) {
+                lastPile++;
+            }
         }
-        else {
-            return false;
-        }
+        return (completedPiles == 3 && lastPile == 1);
     }
 
     public void displayAlert() {
@@ -146,8 +153,7 @@ public class Game extends Pane {
         tableauPiles.clear();
         stockPile.clear();
         discardPile.clear();
-        //getChildren().clear();
-        draggedCards.clear();
+        getChildren().clear();
 
     }
 
@@ -219,7 +225,6 @@ public class Game extends Pane {
         if (pile.isEmpty())
             return card.getBoundsInParent().intersects(pile.getBoundsInParent());
         else
-            displayAlert();
             return card.getBoundsInParent().intersects(pile.getTopCard().getBoundsInParent());
     }
 
@@ -236,9 +241,6 @@ public class Game extends Pane {
         System.out.println(msg);
         MouseUtil.slideToDest(draggedCards, destPile);
         draggedCards.clear();
-        if (isGameWon()) {
-            displayAlert();
-        }
     }
 
 

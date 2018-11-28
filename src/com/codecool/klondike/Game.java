@@ -88,16 +88,20 @@ public class Game extends Pane {
     };
 
     public boolean isGameWon() {
-        for each (pile : tableauPiles) {
-          if pile.isEmpty()
-            if (discardPile.isEmpty() && stockPile.isEmpty())
-            pass;
-            else
-              return false
-          else
-            return false
-        return true
+        for (Pile pile:tableauPiles) {
+          if (pile.isEmpty()) {
+              if (discardPile.isEmpty() && stockPile.isEmpty()) {
+                  assert true;
+              }
+              else {
+                  break;
+              }
+          } else {
+              break;
+          }
+        return true;
       }
+      return false;
     }
 
     public Game() {

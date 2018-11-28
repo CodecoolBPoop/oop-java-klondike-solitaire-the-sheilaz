@@ -70,7 +70,7 @@ public class Game extends Pane {
         double offsetY = e.getSceneY() - dragStartY;
 
         draggedCards.clear();
-        draggedCards.add(card);
+        draggedCards = card.getCardsOnTop();
 
         card.getDropShadow().setRadius(20);
         card.getDropShadow().setOffsetX(10);
@@ -128,7 +128,7 @@ public class Game extends Pane {
                     isValid = true;
                 }
             } else {
-                if (destTopCard.getSuit() == card.getSuit() &&
+                if (Card.isSameSuit(destTopCard, card) &&
                         destTopCard.getRank().getValue() + 1 == card.getRank().getValue()) {
                     isValid = true;
                 }

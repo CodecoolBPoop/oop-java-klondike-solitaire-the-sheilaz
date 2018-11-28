@@ -2,6 +2,7 @@ package com.codecool.klondike;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -15,6 +16,7 @@ import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -39,12 +41,16 @@ public class Game extends Pane {
 
     private EventHandler<MouseEvent> onMouseClickedHandler = e -> {
         Card card = (Card) e.getSource();
-        if (card.getContainingPile().getPileType() == Pile.PileType.STOCK) {
+        Pile containingPile = card.getContainingPile();
+        if (containingPile.getPileType() == Pile.PileType.STOCK && card == containingPile.getTopCard()) {
             card.moveToPile(discardPile);
             card.flip();
             card.setMouseTransparent(false);
             System.out.println("Placed " + card + " to the waste.");
+        } else if (containingPile.getPileType() == Pile.PileType.TABLEAU && card.isFaceDown() && card == containingPile.getTopCard()) {
+            card.flip();
         }
+
     };
 
     private EventHandler<MouseEvent> stockReverseCardsHandler = e -> {
@@ -59,7 +65,8 @@ public class Game extends Pane {
     private EventHandler<MouseEvent> onMouseDraggedHandler = e -> {
         Card card = (Card) e.getSource();
         Pile activePile = card.getContainingPile();
-        if (activePile.getPileType() == Pile.PileType.STOCK)
+        if (activePile.getPileType() == Pile.PileType.STOCK ||
+                (activePile.getPileType() == Pile.PileType.TABLEAU && card.isFaceDown()))
             return;
         double offsetX = e.getSceneX() - dragStartX;
         double offsetY = e.getSceneY() - dragStartY;
@@ -99,6 +106,7 @@ public class Game extends Pane {
 
     public Game() {
         deck = Card.createNewDeck();
+        Collections.shuffle(deck);
         initPiles();
         dealCards();
     }
@@ -187,7 +195,19 @@ public class Game extends Pane {
 
     public void dealCards() {
         Iterator<Card> deckIterator = deck.iterator();
-        //TODO
+        Iterator<Pile> tableauPileIterator = tableauPiles.iterator();
+        int numberOfCards = 1;
+        while (tableauPileIterator.hasNext()){
+            Pile currentPile = tableauPileIterator.next();
+            for (int i = 0; i < numberOfCards; i++) {
+                Card currentCard = deckIterator.next();
+                currentPile.addCard(currentCard);
+                addMouseEventHandlers(currentCard);
+                getChildren().add(currentCard);
+            }
+            currentPile.getTopCard().flip();
+            numberOfCards++;
+        }
         deckIterator.forEachRemaining(card -> {
             stockPile.addCard(card);
             addMouseEventHandlers(card);

@@ -115,7 +115,13 @@ public class Game extends Pane {
     }
 
     public void refillStockFromDiscard() {
-        //TODO
+        stockPile.clear();
+        for (int i = discardPile.numOfCards()-1 ; i > -1; i--) {
+            Card currentCard = discardPile.getCards().get(i);
+            currentCard.flip();
+            stockPile.addCard(currentCard);
+        }
+        discardPile.clear();
         System.out.println("Stock refilled from discard pile.");
     }
 

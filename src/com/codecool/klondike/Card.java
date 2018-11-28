@@ -123,12 +123,7 @@ public class Card extends ImageView {
     }
 
     enum Suit {
-        HEARTS(0), DIAMONDS(1), SPADES(2), CLUBS(3);
-        private int value;
-
-        Suit(int value) {
-            this.value = value;
-        }
+        HEARTS, DIAMONDS, SPADES, CLUBS;
 
         @Override
         public String toString() {
@@ -148,6 +143,10 @@ public class Card extends ImageView {
         @Override
         public String toString() {
             return name().toLowerCase();
+        }
+
+        public int getValue() {
+            return this.value;
         }
 
     }

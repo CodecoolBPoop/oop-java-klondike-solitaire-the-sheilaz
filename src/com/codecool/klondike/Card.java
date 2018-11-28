@@ -1,5 +1,6 @@
 package com.codecool.klondike;
 
+import javafx.collections.FXCollections;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -93,7 +94,7 @@ public class Card extends ImageView {
         return result;
     }
 
-    public boolean isSameSuit(Card card1, Card card2) {
+    public static boolean isSameSuit(Card card1, Card card2) {
         return card1.getSuit() == card2.getSuit();
     }
 
@@ -123,12 +124,7 @@ public class Card extends ImageView {
     }
 
     enum Suit {
-        HEARTS(0), DIAMONDS(1), SPADES(2), CLUBS(3);
-        private int value;
-
-        Suit(int value) {
-            this.value = value;
-        }
+        HEARTS, DIAMONDS, SPADES, CLUBS;
 
         @Override
         public String toString() {
@@ -150,6 +146,20 @@ public class Card extends ImageView {
             return name().toLowerCase();
         }
 
+        public int getValue() {
+            return this.value;
+        }
+
+    }
+
+    public List<Card> getCardsOnTop() {
+        Pile pile = this.getContainingPile();
+        int cardIndex = pile.getCards().indexOf(this);
+        List<Card> topCards = FXCollections.observableArrayList();
+        for (int i = cardIndex; i < pile.numOfCards(); i++) {
+            topCards.add(pile.getCards().get(i));
+        }
+        return topCards;
     }
 
 }

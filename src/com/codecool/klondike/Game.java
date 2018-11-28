@@ -1,5 +1,6 @@
 package com.codecool.klondike;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -97,7 +98,7 @@ public class Game extends Pane {
         }
     };
 
-    private boolean isGameWon() {
+    public boolean isGameWon() {
         if (tableauPiles.isEmpty()) {
             return (discardPile.isEmpty() && stockPile.isEmpty());
         }
@@ -106,9 +107,8 @@ public class Game extends Pane {
         }
     }
 
-    private void displayAlert() {
+    public void displayAlert() {
         Alert alert = new Alert(AlertType.INFORMATION);
-        //alert.setTitle("Confirmation Dialog with Custom Actions");
         alert.setHeaderText("Congratulations, you won!");
         alert.setContentText("Start a new game?");
 
@@ -119,19 +119,29 @@ public class Game extends Pane {
 
       Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == buttonTypeOne) {
-            System.out.println("works");
+            newGame();
         } else if (result.isPresent() && result.get() == buttonTypeTwo) {
-            System.out.println("still works");
+            quitGame();
         }
 
     }
 
-    private void newGame() {
+    public void newGame() {
+        deck.clear();
+        foundationPiles.clear();
+        tableauPiles.clear();
+        stockPile.clear();
+        discardPile.clear();
+        getChildren().clear();
 
+        deck = Card.createNewDeck();
+        Collections.shuffle(deck);
+        initPiles();
+        dealCards();
     }
 
     public void quitGame() {
-
+        Platform.exit();
     }
 
     public Game() {
@@ -173,7 +183,7 @@ public class Game extends Pane {
         if (pile.isEmpty())
             return card.getBoundsInParent().intersects(pile.getBoundsInParent());
         else
-            isGameWon();
+            displayAlert();
             return card.getBoundsInParent().intersects(pile.getTopCard().getBoundsInParent());
     }
 
@@ -190,6 +200,9 @@ public class Game extends Pane {
         System.out.println(msg);
         MouseUtil.slideToDest(draggedCards, destPile);
         draggedCards.clear();
+        if (isGameWon()) {
+            displayAlert();
+        }
     }
 
 

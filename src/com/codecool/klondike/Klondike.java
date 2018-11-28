@@ -3,10 +3,12 @@ package com.codecool.klondike;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import javafx.scene.layout.StackPane;
 import javafx.scene.control.Button;
-import javafx.scene.layout.BorderPane;
+import javafx.event.EventHandler;
+import javafx.scene.input.MouseEvent;
+
 
 
 public class Klondike extends Application {
@@ -27,7 +29,6 @@ public class Klondike extends Application {
         primaryStage.setTitle("Klondike Solitaire");
         primaryStage.setScene(new Scene(game, WINDOW_WIDTH, WINDOW_HEIGHT));
         primaryStage.show();
-
         createButtons(game);
     }
 
@@ -38,9 +39,18 @@ public class Klondike extends Application {
         newGameButton.setLayoutY( 850 );
 
         newGameButton.setOnAction((event) -> {
-
             game.newGame();
             createButtons(game);
+        });
+
+        Button quitGameButton = new Button("Quit Game");
+        game.getChildren().add( quitGameButton);
+        quitGameButton.setLayoutX( 120 );
+        quitGameButton.setLayoutY( 850 );
+
+        quitGameButton.setOnAction((event) -> {
+           game.quitGame();
+           createButtons( game );
         });
     }
 

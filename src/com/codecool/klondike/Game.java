@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
@@ -32,6 +33,8 @@ public class Game extends Pane {
     private static double STOCK_GAP = 1;
     private static double FOUNDATION_GAP = 0;
     private static double TABLEAU_GAP = 30;
+
+    Alert alert = new Alert(AlertType.CONFIRMATION);
 
 
     private EventHandler<MouseEvent> onMouseClickedHandler = e -> {
@@ -88,20 +91,10 @@ public class Game extends Pane {
     };
 
     public boolean isGameWon() {
-        for (Pile pile:tableauPiles) {
-          if (pile.isEmpty()) {
-              if (discardPile.isEmpty() && stockPile.isEmpty()) {
-                  assert true;
-              }
-              else {
-                  break;
-              }
-          } else {
-              break;
-          }
-        return true;
-      }
-      return false;
+        if (tableauPiles.isEmpty()) {
+            return discardPile.isEmpty() && stockPile.isEmpty();
+        }
+    return false;
     }
 
     public Game() {

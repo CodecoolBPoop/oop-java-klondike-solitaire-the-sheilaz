@@ -2,6 +2,7 @@ package com.codecool.klondike;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
@@ -37,12 +38,16 @@ public class Game extends Pane {
 
     private EventHandler<MouseEvent> onMouseClickedHandler = e -> {
         Card card = (Card) e.getSource();
-        if (card.getContainingPile().getPileType() == Pile.PileType.STOCK) {
+        Pile containingPile = card.getContainingPile();
+        if (containingPile.getPileType() == Pile.PileType.STOCK && card == containingPile.getTopCard()) {
             card.moveToPile(discardPile);
             card.flip();
             card.setMouseTransparent(false);
             System.out.println("Placed " + card + " to the waste.");
+        } else if (containingPile.getPileType() == Pile.PileType.TABLEAU && card.isFaceDown() && card == containingPile.getTopCard()) {
+            card.flip();
         }
+
     };
 
     private EventHandler<MouseEvent> stockReverseCardsHandler = e -> {

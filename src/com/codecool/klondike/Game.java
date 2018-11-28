@@ -6,6 +6,8 @@ import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
+import java.util.Optional;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
@@ -35,8 +37,6 @@ public class Game extends Pane {
     private static double STOCK_GAP = 1;
     private static double FOUNDATION_GAP = 0;
     private static double TABLEAU_GAP = 30;
-
-    Alert alert = new Alert(AlertType.CONFIRMATION);
 
 
     private EventHandler<MouseEvent> onMouseClickedHandler = e -> {
@@ -97,11 +97,41 @@ public class Game extends Pane {
         }
     };
 
-    public boolean isGameWon() {
+    private boolean isGameWon() {
         if (tableauPiles.isEmpty()) {
-            return discardPile.isEmpty() && stockPile.isEmpty();
+            return (discardPile.isEmpty() && stockPile.isEmpty());
         }
-    return false;
+        else {
+            return false;
+        }
+    }
+
+    private void displayAlert() {
+        Alert alert = new Alert(AlertType.INFORMATION);
+        //alert.setTitle("Confirmation Dialog with Custom Actions");
+        alert.setHeaderText("Congratulations, you won!");
+        alert.setContentText("Start a new game?");
+
+        ButtonType buttonTypeOne = new ButtonType("Yes");
+        ButtonType buttonTypeTwo = new ButtonType("No");
+
+        alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo);
+
+      Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == buttonTypeOne) {
+            System.out.println("works");
+        } else if (result.isPresent() && result.get() == buttonTypeTwo) {
+            System.out.println("still works");
+        }
+
+    }
+
+    private void newGame() {
+
+    }
+
+    public void quitGame() {
+
     }
 
     public Game() {
@@ -109,6 +139,7 @@ public class Game extends Pane {
         Collections.shuffle(deck);
         initPiles();
         dealCards();
+
     }
 
     public void addMouseEventHandlers(Card card) {
@@ -142,6 +173,7 @@ public class Game extends Pane {
         if (pile.isEmpty())
             return card.getBoundsInParent().intersects(pile.getBoundsInParent());
         else
+            isGameWon();
             return card.getBoundsInParent().intersects(pile.getTopCard().getBoundsInParent());
     }
 

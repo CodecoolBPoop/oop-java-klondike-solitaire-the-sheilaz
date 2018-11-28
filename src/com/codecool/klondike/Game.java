@@ -63,6 +63,7 @@ public class Game extends Pane {
         Card card = (Card) e.getSource();
         Pile activePile = card.getContainingPile();
         if (activePile.getPileType() == Pile.PileType.STOCK ||
+                (activePile.getPileType() == Pile.PileType.DISCARD && card != activePile.getTopCard()) ||
                 (activePile.getPileType() == Pile.PileType.TABLEAU && card.isFaceDown()))
             return;
         double offsetX = e.getSceneX() - dragStartX;
@@ -90,7 +91,7 @@ public class Game extends Pane {
             handleValidMove(card, pile);
         } else {
             draggedCards.forEach(MouseUtil::slideBack);
-            draggedCards = null;
+            draggedCards.clear();
         }
     };
 

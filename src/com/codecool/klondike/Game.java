@@ -108,6 +108,8 @@ public class Game extends Pane {
     }
 
     public void displayAlert() {
+        clearStage();
+
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setHeaderText("Congratulations, you won!");
         alert.setContentText("Start a new game?");
@@ -123,17 +125,10 @@ public class Game extends Pane {
         } else if (result.isPresent() && result.get() == buttonTypeTwo) {
             quitGame();
         }
-
     }
 
     public void newGame() {
-        deck.clear();
-        foundationPiles.clear();
-        tableauPiles.clear();
-        stockPile.clear();
-        discardPile.clear();
-        getChildren().clear();
-
+        clearStage();
         deck = Card.createNewDeck();
         Collections.shuffle(deck);
         initPiles();
@@ -142,6 +137,17 @@ public class Game extends Pane {
 
     public void quitGame() {
         Platform.exit();
+    }
+
+    public void clearStage() {
+        deck.clear();
+        foundationPiles.clear();
+        tableauPiles.clear();
+        stockPile.clear();
+        discardPile.clear();
+        //getChildren().clear();
+        draggedCards.clear();
+
     }
 
     public Game() {
@@ -258,7 +264,6 @@ public class Game extends Pane {
             addMouseEventHandlers(card);
             getChildren().add(card);
         });
-
     }
 
     public void setTableBackground(Image tableBackground) {

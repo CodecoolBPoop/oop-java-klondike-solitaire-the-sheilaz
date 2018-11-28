@@ -30,7 +30,16 @@ public class Klondike extends Application {
         createButtons(game);
     }
 
-    private  void createButtons(Game game) {
+    public  void createButtons(Game game) {
+        Button quitGameButton = new Button("Quit Game");
+        game.getChildren().add( quitGameButton);
+        quitGameButton.setLayoutX( 120 );
+        quitGameButton.setLayoutY( 850 );
+
+        quitGameButton.setOnAction((event) -> {
+           game.quitGame();
+        });
+
         Button newGameButton = new Button( "New Game" );
         game.getChildren().add( newGameButton );
         newGameButton.setLayoutX( 10 );
@@ -40,16 +49,5 @@ public class Klondike extends Application {
             game.newGame();
             createButtons(game);
         });
-
-        Button quitGameButton = new Button("Quit Game");
-        game.getChildren().add( quitGameButton);
-        quitGameButton.setLayoutX( 120 );
-        quitGameButton.setLayoutY( 850 );
-
-        quitGameButton.setOnAction((event) -> {
-           game.quitGame();
-           createButtons( game );
-        });
     }
-
 }

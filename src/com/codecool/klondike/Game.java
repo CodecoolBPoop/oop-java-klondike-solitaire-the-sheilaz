@@ -10,6 +10,9 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import java.util.Optional;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
@@ -120,6 +123,28 @@ public class Game extends Pane {
         }
     };
 
+    private EventHandler<KeyEvent> onKeyPressHandler = e -> {
+        KeyCode keyCode = e.getCode();
+        if (e.getCode() == keyCode.SPACE) {
+            int tableauFaceUpPile = 0;
+            for (Pile pile : tableauPiles) {
+                if (pile == null) {
+                    tableauFaceUpPile++;
+                } else {
+                    for (Card card : pile) {
+                        if (card.isFaceDown()) {
+                            return;
+                        }
+                    }
+                }
+                tableauFaceUpPile++;
+            }
+            if (tableauFaceUpPile == 7) {
+                displayAlert();
+            }
+        }
+    };
+
     public boolean isGameWon() {
         int completedPiles = 0;
         int lastPile = 0;
@@ -180,7 +205,11 @@ public class Game extends Pane {
         Collections.shuffle(deck);
         initPiles();
         dealCards();
+        addKeyEventhandlers();
+    }
 
+    public void addKeyEventhandlers(Keycode keycode) {
+       keyCode.setOnKeyPressed(onKeyPressHandler);
     }
 
     public void addMouseEventHandlers(Card card) {

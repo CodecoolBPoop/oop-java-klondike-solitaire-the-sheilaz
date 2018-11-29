@@ -123,28 +123,26 @@ public class Game extends Pane {
         }
     };
 
-    private EventHandler<KeyEvent> onKeyPressHandler = e -> {
-        KeyCode keyCode = e.getCode();
-        boolean emptyPiles = stockPile.isEmpty() && discardPile.isEmpty();
-        if (e.getCode() == keyCode.SPACE) {
-            int tableauFaceUpPile = 0;
-            for (Pile pile : tableauPiles) {
-                if (pile == null) {
-                    tableauFaceUpPile++;
-                } else {
-                    for (Card card : pile) {
+    public void autoComplete() {
+        displayAlert();
+    };
+
+    public boolean canBeAutoCompleted() {
+        if (stockPile.isEmpty() && discardPile.isEmpty()) {
+            for (Pile pile: tableauPiles) {
+                if (!(pile.numOfCards() == 0)) {
+                    for (Card card: pile.getCards()) {
                         if (card.isFaceDown()) {
-                            return;
+                            return false;
                         }
                     }
                 }
-                tableauFaceUpPile++;
             }
-            if (tableauFaceUpPile == 7 && emptyPiles) {
-                displayAlert();
-            }
+            return true;
+        } else {
+            return false;
         }
-    };
+    }
 
     public boolean isGameWon() {
         int completedPiles = 0;
@@ -206,11 +204,6 @@ public class Game extends Pane {
         Collections.shuffle(deck);
         initPiles();
         dealCards();
-        addKeyEventhandlers();
-    }
-
-    public void addKeyEventhandlers(Keycode keycode) {
-       keyCode.setOnKeyPressed(onKeyPressHandler);
     }
 
     public void addMouseEventHandlers(Card card) {

@@ -155,6 +155,10 @@ public class Game extends Pane {
                 List<Card> cardAsList = FXCollections.observableArrayList();
                 cardAsList.add(card);
                 MouseUtil.slideToDest(cardAsList, foundationPile);
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                }
                 break;
             }
         }

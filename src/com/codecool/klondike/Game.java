@@ -7,9 +7,11 @@ import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import java.util.Optional;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
@@ -46,6 +48,10 @@ public class Game extends Pane {
     private EventHandler<MouseEvent> onMouseClickedHandler = e -> {
         Card card = (Card) e.getSource();
         Pile containingPile = card.getContainingPile();
+        if (e.getClickCount() == 2 && !e.isConsumed()) {
+            putToFoundation(card);
+            e.consume();
+        }
         if (containingPile.getPileType() == Pile.PileType.STOCK && card == containingPile.getTopCard()) {
             card.moveToPile(discardPile);
             card.flip();
@@ -195,8 +201,35 @@ public class Game extends Pane {
         }
     }
 
+    public  void createButtons( ) {
+        Button quitGameButton = new Button();
+        getChildren().add( quitGameButton);
+
+        quitGameButton.setLayoutX( 10 );
+        quitGameButton.setLayoutY( 10 );
+        quitGameButton.setPrefSize( 50, 50 );
+        quitGameButton.setStyle("-fx-background-image: url('buttons/redx.png')");
+
+        quitGameButton.setOnAction((event) -> {
+            quitGame();
+        });
+
+        Button newGameButton = new Button();
+        getChildren().add( newGameButton );
+
+        newGameButton.setLayoutX( 10 );
+        newGameButton.setLayoutY( 110 );
+        newGameButton.setPrefSize( 50, 50 );
+        newGameButton.setStyle("-fx-background-image: url('buttons/restart.jpg')");
+
+        newGameButton.setOnAction((event) -> {
+            newGame();
+        });
+    }
+
     public void newGame() {
         clearStage();
+        createButtons();
         deck = Card.createNewDeck();
         Collections.shuffle(deck);
         initPiles();
@@ -218,6 +251,7 @@ public class Game extends Pane {
     }
 
     public Game() {
+        createButtons();
         deck = Card.createNewDeck();
         Collections.shuffle(deck);
         initPiles();

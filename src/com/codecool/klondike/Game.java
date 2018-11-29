@@ -77,8 +77,7 @@ public class Game extends Pane {
         double offsetY = e.getSceneY() - dragStartY;
 
         draggedCards.clear();
-        List<Card> cardsList = FXCollections.observableArrayList();
-        cardsList = card.getCardsOnTop();
+        List<Card> cardsList = card.getCardsOnTop();
 
         if(activePile.getPileType() == Pile.PileType.TABLEAU && !card.equals(activePile.getTopCard())){
             for (int i = 0; i < cardsList.size(); i++) {

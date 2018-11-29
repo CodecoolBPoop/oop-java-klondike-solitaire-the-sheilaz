@@ -46,12 +46,12 @@ public class Game extends Pane {
 
 
     private EventHandler<MouseEvent> onMouseClickedHandler = e -> {
-        if (e.getClickCount() == 2 && !e.isConsumed()) {
-            System.out.println("Double clicked");
-            e.consume();
-        }
         Card card = (Card) e.getSource();
         Pile containingPile = card.getContainingPile();
+        if (e.getClickCount() == 2 && !e.isConsumed()) {
+            putToFoundation(card);
+            e.consume();
+        }
         if (containingPile.getPileType() == Pile.PileType.STOCK && card == containingPile.getTopCard()) {
             card.moveToPile(discardPile);
             card.flip();
@@ -152,13 +152,18 @@ public class Game extends Pane {
     }
 
     private void putToFoundation(Card card) {
+        List<Card> cardAsList = FXCollections.observableArrayList();
         for (Pile foundationPile: foundationPiles) {
+            if (foundationPile.isEmpty() && card.getRank()== Card.Rank.ACE){
+                cardAsList.add(card);
+                MouseUtil.slideToDest(cardAsList, foundationPile);
+                break;
+            }
             if (foundationPile.isEmpty()) {
                 continue;
             }
             if (foundationPile.getTopCard().getSuit() == card.getSuit() &&
                     foundationPile.getTopCard().getRank().getValue() + 1 == card.getRank().getValue()) {
-                List<Card> cardAsList = FXCollections.observableArrayList();
                 cardAsList.add(card);
                 MouseUtil.slideToDest(cardAsList, foundationPile);
                 break;

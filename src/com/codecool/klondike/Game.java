@@ -12,6 +12,9 @@ import javafx.scene.control.ButtonType;
 import java.util.Optional;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
@@ -125,6 +128,61 @@ public class Game extends Pane {
         }
     };
 
+    public void autoComplete() {
+        do {
+            for (Pile origPile: tableauPiles) {
+                if (origPile.isEmpty()) {
+                    continue;
+                }
+                Card card = origPile.getTopCard();
+                putToFoundation(card); // TODO: thread should wait until animation finishes!
+            }
+        } while (anyCardsOnTable());
+    }
+
+    private boolean anyCardsOnTable() {
+        boolean isCardOnTable = false;
+        for (Pile pile: tableauPiles) {
+            if (!pile.isEmpty()) {
+                isCardOnTable = true;
+                break;
+            }
+        }
+        return isCardOnTable;
+    }
+
+    private void putToFoundation(Card card) {
+        for (Pile foundationPile: foundationPiles) {
+            if (foundationPile.isEmpty()) {
+                continue;
+            }
+            if (foundationPile.getTopCard().getSuit() == card.getSuit() &&
+                    foundationPile.getTopCard().getRank().getValue() + 1 == card.getRank().getValue()) {
+                List<Card> cardAsList = FXCollections.observableArrayList();
+                cardAsList.add(card);
+                MouseUtil.slideToDest(cardAsList, foundationPile);
+                break;
+            }
+        }
+    }
+
+    public boolean canBeAutoCompleted() {
+        if (stockPile.isEmpty() && discardPile.isEmpty()) {
+            for (Pile pile: tableauPiles) {
+                if (!(pile.numOfCards() == 0)) {
+                    for (Card card: pile.getCards()) {
+                        if (card.isFaceDown()) {
+                            return false;
+                        }
+                    }
+                }
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public boolean isGameWon() {
         int completedPiles = 0;
         int lastPile = 0;
@@ -188,7 +246,7 @@ public class Game extends Pane {
         clearStage();
         createButtons();
         deck = Card.createNewDeck();
-        Collections.shuffle(deck);
+        // Collections.shuffle(deck);
         initPiles();
         dealCards();
     }
@@ -213,7 +271,6 @@ public class Game extends Pane {
         Collections.shuffle(deck);
         initPiles();
         dealCards();
-
     }
 
     public void addMouseEventHandlers(Card card) {

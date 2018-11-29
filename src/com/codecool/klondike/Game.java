@@ -1,10 +1,15 @@
 package com.codecool.klondike;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import java.util.Optional;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
@@ -106,6 +111,9 @@ public class Game extends Pane {
         Pile pile = getValidIntersectingPile(card, pilesToDragTo);
         if (pile != null) {
             handleValidMove(card, pile);
+            if (isGameWon()) {
+                displayAlert();
+            }
         } else {
             draggedCards.forEach(MouseUtil::slideBack);
             draggedCards.clear();
@@ -113,15 +121,92 @@ public class Game extends Pane {
     };
 
     public boolean isGameWon() {
-        //TODO
-        return false;
+        int completedPiles = 0;
+        int lastPile = 0;
+        for (Pile pile : foundationPiles) {
+            if (pile.numOfCards() == 13) {
+                completedPiles++;
+            } else if (pile.numOfCards() == 12) {
+                lastPile++;
+            }
+        }
+        return (completedPiles == 3 && lastPile == 1);
     }
 
-    public Game() {
+    public void displayAlert() {
+        clearStage();
+
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setHeaderText("Congratulations, you won!");
+        alert.setContentText("Start a new game?");
+
+        ButtonType buttonTypeOne = new ButtonType("Yes");
+        ButtonType buttonTypeTwo = new ButtonType("No");
+
+        alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo);
+
+      Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == buttonTypeOne) {
+            newGame();
+        } else if (result.isPresent() && result.get() == buttonTypeTwo) {
+            quitGame();
+        }
+    }
+
+    public  void createButtons( ) {
+        Button quitGameButton = new Button("Quit Game");
+        getChildren().add( quitGameButton);
+
+        quitGameButton.setLayoutX( 475 );
+        quitGameButton.setLayoutY( 30 );
+        quitGameButton.setStyle("-fx-font: 15 arial; -fx-base: red;");
+
+        quitGameButton.setOnAction((event) -> {
+            quitGame();
+        });
+
+        Button newGameButton = new Button( "New Game" );
+        getChildren().add( newGameButton );
+
+        newGameButton.setLayoutX( 475 );
+        newGameButton.setLayoutY( 80 );
+        newGameButton.setStyle("-fx-font: 15 arial; -fx-base: blue;");
+
+        newGameButton.setOnAction((event) -> {
+            newGame();
+        });
+    }
+
+    public void newGame() {
+        clearStage();
+        createButtons();
         deck = Card.createNewDeck();
         Collections.shuffle(deck);
         initPiles();
         dealCards();
+    }
+
+    public void quitGame() {
+        Platform.exit();
+    }
+
+    public void clearStage() {
+        deck.clear();
+        foundationPiles.clear();
+        tableauPiles.clear();
+        stockPile.clear();
+        discardPile.clear();
+        getChildren().clear();
+
+    }
+
+    public Game() {
+        createButtons();
+        deck = Card.createNewDeck();
+        Collections.shuffle(deck);
+        initPiles();
+        dealCards();
+
     }
 
     public void addMouseEventHandlers(Card card) {
@@ -255,7 +340,6 @@ public class Game extends Pane {
             addMouseEventHandlers(card);
             getChildren().add(card);
         });
-
     }
 
     public void setTableBackground(Image tableBackground) {

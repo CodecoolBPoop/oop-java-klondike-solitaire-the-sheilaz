@@ -125,6 +125,7 @@ public class Game extends Pane {
 
     private EventHandler<KeyEvent> onKeyPressHandler = e -> {
         KeyCode keyCode = e.getCode();
+        boolean emptyPiles = stockPile.isEmpty() && discardPile.isEmpty();
         if (e.getCode() == keyCode.SPACE) {
             int tableauFaceUpPile = 0;
             for (Pile pile : tableauPiles) {
@@ -139,7 +140,7 @@ public class Game extends Pane {
                 }
                 tableauFaceUpPile++;
             }
-            if (tableauFaceUpPile == 7) {
+            if (tableauFaceUpPile == 7 && emptyPiles) {
                 displayAlert();
             }
         }

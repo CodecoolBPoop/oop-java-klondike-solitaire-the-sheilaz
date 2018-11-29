@@ -132,10 +132,14 @@ public class Game extends Pane {
         List<Pile> pilesToCheck = FXCollections.concat((ObservableList<Pile>) tableauPiles, (ObservableList<Pile>) asList(discardPile));
         for (Pile origPile: pilesToCheck) {
             if (origPile.isEmpty()) {
+                if (isAutoGameWon()) {
+                    displayAlert();
+                }
                 continue;
             }
             Card card = origPile.getTopCard();
-            putToFoundation(card); // TODO: thread should wait until animation finishes!
+            putToFoundation(card);
+            // TODO: thread should wait until animation finishes!
         }
     }
 
@@ -179,6 +183,16 @@ public class Game extends Pane {
             }
         }
         return (completedPiles == 3 && lastPile == 1);
+    }
+
+    public boolean isAutoGameWon() {
+        int completePiles = 0;
+        for (Pile pile : foundationPiles) {
+            if (pile.numOfCards() == 13) {
+                completePiles++;
+            }
+        }
+        return (completePiles == 4);
     }
 
     public void displayAlert() {
@@ -231,7 +245,7 @@ public class Game extends Pane {
         clearStage();
         createButtons();
         deck = Card.createNewDeck();
-        Collections.shuffle(deck);
+        //Collections.shuffle(deck);
         initPiles();
         dealCards();
     }
@@ -253,7 +267,7 @@ public class Game extends Pane {
     public Game() {
         createButtons();
         deck = Card.createNewDeck();
-        Collections.shuffle(deck);
+        //Collections.shuffle(deck);
         initPiles();
         dealCards();
     }

@@ -22,7 +22,7 @@ public class Klondike extends Application {
     public void start(Stage primaryStage) {
         Card.loadCardImages();
         Game game = new Game();
-        game.setTableBackground(new Image("/table/green.png"));
+        game.setTableBackground(new Image("/table/orangeish.png"));
 
         primaryStage.setTitle("Klondike Solitaire");
         primaryStage.setScene(new Scene(game, WINDOW_WIDTH, WINDOW_HEIGHT));

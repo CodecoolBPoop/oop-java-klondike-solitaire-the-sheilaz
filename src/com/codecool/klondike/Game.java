@@ -11,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import java.util.Optional;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
@@ -154,23 +155,25 @@ public class Game extends Pane {
     }
 
     public  void createButtons( ) {
-        Button quitGameButton = new Button("Quit Game");
+        Button quitGameButton = new Button();
         getChildren().add( quitGameButton);
 
-        quitGameButton.setLayoutX( 475 );
-        quitGameButton.setLayoutY( 30 );
-        quitGameButton.setStyle("-fx-font: 15 arial; -fx-base: red;");
+        quitGameButton.setLayoutX( 10 );
+        quitGameButton.setLayoutY( 10 );
+        quitGameButton.setPrefSize( 50, 50 );
+        quitGameButton.setStyle("-fx-background-image: url('buttons/redx.png')");
 
         quitGameButton.setOnAction((event) -> {
             quitGame();
         });
 
-        Button newGameButton = new Button( "New Game" );
+        Button newGameButton = new Button();
         getChildren().add( newGameButton );
 
-        newGameButton.setLayoutX( 475 );
-        newGameButton.setLayoutY( 80 );
-        newGameButton.setStyle("-fx-font: 15 arial; -fx-base: blue;");
+        newGameButton.setLayoutX( 10 );
+        newGameButton.setLayoutY( 110 );
+        newGameButton.setPrefSize( 50, 50 );
+        newGameButton.setStyle("-fx-background-image: url('buttons/restart.jpg')");
 
         newGameButton.setOnAction((event) -> {
             newGame();

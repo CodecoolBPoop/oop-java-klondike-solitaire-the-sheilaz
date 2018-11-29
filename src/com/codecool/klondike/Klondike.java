@@ -28,11 +28,11 @@ public class Klondike extends Application {
         primaryStage.setTitle("Klondike Solitaire");
         Scene scene = new Scene(game, WINDOW_WIDTH, WINDOW_HEIGHT);
         primaryStage.setScene(scene);
-        /*scene.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.SPACE && game.canBeAutoCompleted()) {
+        scene.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.UP && game.canBeAutoCompleted()) {
                 game.autoComplete();
             }
-        });*/
+        });
         primaryStage.show();
         createButtons(game);
     }

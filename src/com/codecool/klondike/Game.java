@@ -123,8 +123,42 @@ public class Game extends Pane {
     };
 
     public void autoComplete() {
-        displayAlert();
-    };
+        do {
+            for (Pile origPile: tableauPiles) {
+                if (origPile.isEmpty()) {
+                    continue;
+                }
+                Card card = origPile.getTopCard();
+                putToFoundation(card); // TODO: thread should wait until animation finishes!
+            }
+        } while (anyCardsOnTable());
+    }
+
+    private boolean anyCardsOnTable() {
+        boolean isCardOnTable = false;
+        for (Pile pile: tableauPiles) {
+            if (!pile.isEmpty()) {
+                isCardOnTable = true;
+                break;
+            }
+        }
+        return isCardOnTable;
+    }
+
+    private void putToFoundation(Card card) {
+        for (Pile foundationPile: foundationPiles) {
+            if (foundationPile.isEmpty()) {
+                continue;
+            }
+            if (foundationPile.getTopCard().getSuit() == card.getSuit() &&
+                    foundationPile.getTopCard().getRank().getValue() + 1 == card.getRank().getValue()) {
+                List<Card> cardAsList = FXCollections.observableArrayList();
+                cardAsList.add(card);
+                MouseUtil.slideToDest(cardAsList, foundationPile);
+                break;
+            }
+        }
+    }
 
     public boolean canBeAutoCompleted() {
         if (stockPile.isEmpty() && discardPile.isEmpty()) {
@@ -179,7 +213,7 @@ public class Game extends Pane {
     public void newGame() {
         clearStage();
         deck = Card.createNewDeck();
-        Collections.shuffle(deck);
+        // Collections.shuffle(deck);
         initPiles();
         dealCards();
     }

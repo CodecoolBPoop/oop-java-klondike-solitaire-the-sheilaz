@@ -123,62 +123,43 @@ public class Game extends Pane {
     };
 
     public void autoComplete() {
-        do {
-            for (Pile origPile: tableauPiles) {
-                if (origPile.isEmpty()) {
-                    continue;
-                }
-                Card card = origPile.getTopCard();
-                putToFoundation(card); // TODO: thread should wait until animation finishes!
+        List<Pile> pilesToCheck = FXCollections.concat((ObservableList<Pile>) tableauPiles, (ObservableList<Pile>) asList(discardPile));
+        for (Pile origPile: pilesToCheck) {
+            if (origPile.isEmpty()) {
+                continue;
             }
-        } while (anyCardsOnTable());
-    }
-
-    private boolean anyCardsOnTable() {
-        boolean isCardOnTable = false;
-        for (Pile pile: tableauPiles) {
-            if (!pile.isEmpty()) {
-                isCardOnTable = true;
-                break;
-            }
+            Card card = origPile.getTopCard();
+            putToFoundation(card); // TODO: thread should wait until animation finishes!
         }
-        return isCardOnTable;
     }
 
     private void putToFoundation(Card card) {
+        List<Card> cardAsList = asList(card);
         for (Pile foundationPile: foundationPiles) {
             if (foundationPile.isEmpty()) {
+                if (card.getRank() == Card.Rank.ACE) {
+                    MouseUtil.slideToDest(cardAsList, foundationPile);
+                }
                 continue;
             }
             if (foundationPile.getTopCard().getSuit() == card.getSuit() &&
                     foundationPile.getTopCard().getRank().getValue() + 1 == card.getRank().getValue()) {
-                List<Card> cardAsList = FXCollections.observableArrayList();
-                cardAsList.add(card);
                 MouseUtil.slideToDest(cardAsList, foundationPile);
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                }
                 break;
             }
         }
     }
 
-    public boolean canBeAutoCompleted() {
-        if (stockPile.isEmpty() && discardPile.isEmpty()) {
-            for (Pile pile: tableauPiles) {
-                if (!(pile.numOfCards() == 0)) {
-                    for (Card card: pile.getCards()) {
-                        if (card.isFaceDown()) {
-                            return false;
-                        }
-                    }
-                }
-            }
-            return true;
-        } else {
-            return false;
-        }
+    private List<Card> asList(Card object) {
+        List<Card> cardAsList = FXCollections.observableArrayList();
+        cardAsList.add(object);
+        return cardAsList;
+    }
+
+    private List<Pile> asList(Pile object) {
+        List<Pile> cardAsList = FXCollections.observableArrayList();
+        cardAsList.add(object);
+        return cardAsList;
     }
 
     public boolean isGameWon() {
@@ -217,7 +198,7 @@ public class Game extends Pane {
     public void newGame() {
         clearStage();
         deck = Card.createNewDeck();
-        // Collections.shuffle(deck);
+        Collections.shuffle(deck);
         initPiles();
         dealCards();
     }

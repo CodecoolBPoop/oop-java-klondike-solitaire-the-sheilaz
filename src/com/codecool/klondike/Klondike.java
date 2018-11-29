@@ -1,7 +1,11 @@
 package com.codecool.klondike;
 
 import javafx.application.Application;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
@@ -25,11 +29,11 @@ public class Klondike extends Application {
         Game game = new Game();
         game.setTableBackground(new Image("/table/green.png"));
 
-        primaryStage.setTitle("Klondike Solitaire");
+        primaryStage.setTitle("The Sheilaz Solitaire");
         Scene scene = new Scene(game, WINDOW_WIDTH, WINDOW_HEIGHT);
         primaryStage.setScene(scene);
         scene.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.UP && game.canBeAutoCompleted()) {
+            if (event.getCode() == KeyCode.UP) {
                 game.autoComplete();
             }
         });

@@ -7,6 +7,7 @@ import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import java.util.Optional;
 import javafx.scene.image.Image;
@@ -153,8 +154,33 @@ public class Game extends Pane {
         }
     }
 
+    public  void createButtons( ) {
+        Button quitGameButton = new Button("Quit Game");
+        getChildren().add( quitGameButton);
+
+        quitGameButton.setLayoutX( 475 );
+        quitGameButton.setLayoutY( 30 );
+        quitGameButton.setStyle("-fx-font: 15 arial; -fx-base: red;");
+
+        quitGameButton.setOnAction((event) -> {
+            quitGame();
+        });
+
+        Button newGameButton = new Button( "New Game" );
+        getChildren().add( newGameButton );
+
+        newGameButton.setLayoutX( 475 );
+        newGameButton.setLayoutY( 80 );
+        newGameButton.setStyle("-fx-font: 15 arial; -fx-base: blue;");
+
+        newGameButton.setOnAction((event) -> {
+            newGame();
+        });
+    }
+
     public void newGame() {
         clearStage();
+        createButtons();
         deck = Card.createNewDeck();
         Collections.shuffle(deck);
         initPiles();
@@ -176,6 +202,7 @@ public class Game extends Pane {
     }
 
     public Game() {
+        createButtons();
         deck = Card.createNewDeck();
         Collections.shuffle(deck);
         initPiles();

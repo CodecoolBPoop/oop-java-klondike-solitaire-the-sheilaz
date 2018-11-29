@@ -27,29 +27,5 @@ public class Klondike extends Application {
         primaryStage.setTitle("Klondike Solitaire");
         primaryStage.setScene(new Scene(game, WINDOW_WIDTH, WINDOW_HEIGHT));
         primaryStage.show();
-        createButtons(game);
-    }
-
-    public  void createButtons(Game game) {
-        Button quitGameButton = new Button("Quit Game");
-        game.getChildren().add( quitGameButton);
-        quitGameButton.setLayoutX( 475 );
-        quitGameButton.setLayoutY( 30 );
-        quitGameButton.setStyle("-fx-font: 15 arial; -fx-base: red;");
-
-        quitGameButton.setOnAction((event) -> {
-           game.quitGame();
-        });
-
-        Button newGameButton = new Button( "New Game" );
-        game.getChildren().add( newGameButton );
-        newGameButton.setLayoutX( 475 );
-        newGameButton.setLayoutY( 80 );
-
-        newGameButton.setStyle("-fx-font: 15 arial; -fx-base: blue;");
-        newGameButton.setOnAction((event) -> {
-            game.newGame();
-            createButtons(game);
-        });
     }
 }

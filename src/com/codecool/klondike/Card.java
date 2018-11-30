@@ -146,6 +146,8 @@ public class Card extends ImageView {
             return name().toLowerCase();
         }
 
+        //TODO: useful method to add: public boolean follows(Rank other, Pile pileType)
+
         public int getValue() {
             return this.value;
         }

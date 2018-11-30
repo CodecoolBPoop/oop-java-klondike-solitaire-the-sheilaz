@@ -32,7 +32,7 @@ public class Klondike extends Application {
         primaryStage.setTitle("The Sheilaz Solitaire");
         Scene scene = new Scene(game, WINDOW_WIDTH, WINDOW_HEIGHT);
         primaryStage.setScene(scene);
-        scene.setOnKeyPressed(event -> {
+        scene.setOnKeyPressed(event -> { // TODO: javaFX timeline could be a solution
             if (event.getCode() == KeyCode.UP) {
                 game.autoComplete();
             }

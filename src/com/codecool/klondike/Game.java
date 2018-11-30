@@ -85,7 +85,7 @@ public class Game extends Pane {
         draggedCards.clear();
         List<Card> cardsList = card.getCardsOnTop();
 
-        if(activePile.getPileType() == Pile.PileType.TABLEAU && !card.equals(activePile.getTopCard())){
+        if(activePile.getPileType() == Pile.PileType.TABLEAU && !card.equals(activePile.getTopCard())){ // TODO: name condition so that it's easily understandable
             for (int i = 0; i < cardsList.size(); i++) {
                 Card currentCard = cardsList.get(i);
                 draggedCards.add(currentCard);
@@ -97,7 +97,7 @@ public class Game extends Pane {
                 currentCard.setTranslateX(offsetX);
                 currentCard.setTranslateY(offsetY);
             }
-        } else {
+        } else {  // TODO: could replace else with return statement at the end of the if
 
             draggedCards.add(card);
 

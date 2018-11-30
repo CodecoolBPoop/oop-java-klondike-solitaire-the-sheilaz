@@ -245,7 +245,7 @@ public class Game extends Pane {
         clearStage();
         createButtons();
         deck = Card.createNewDeck();
-        //Collections.shuffle(deck);
+        Collections.shuffle(deck);
         initPiles();
         dealCards();
     }
@@ -267,7 +267,7 @@ public class Game extends Pane {
     public Game() {
         createButtons();
         deck = Card.createNewDeck();
-        //Collections.shuffle(deck);
+        Collections.shuffle(deck);
         initPiles();
         dealCards();
     }
